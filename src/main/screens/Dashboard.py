@@ -2,20 +2,30 @@ from textual.app import ComposeResult
 from textual.widgets import Static, Label
 from textual.containers import Vertical, Grid
 from textual import work
+from textual.reactive import reactive
+
 from services.CryptoPriceService import CryptoPriceService
-import time
-import random
+
 
 SYMBOLS = [
-    "BTC/USD", 
-    "ETH/USD", 
-    "SOL/USD", 
-    "BNB/USD", 
-    "MATIC/USD",
-    "USDC/USD", 
-    "DAI/USD", 
+    "BTC/USD",
+    "WBTC/USD",
+    "ETH/USD",
+    "XRP/USD",
     "USDT/USD",
-    "USDT/USD",
+    "DOT/USD",
+    "UNI/USD",
+    "DAI/USD",
+    "DOGE/USD",
+    "BAT/USD",
+    "ALGO/USD",
+    "MINA/USD",
+    "DAI/USDC",
+    "AAVE/USD",
+    "SUSHI/EUR",
+    "SOL/USD",
+    "SUSHI/USD",
+    "MATIC/USD"
 ]
 
 _BACKGROUND_COLORS = [
@@ -30,7 +40,13 @@ _BACKGROUND_COLORS = [
     "#00bbcc",
     "#0099cc",
     "#3366bb",
-    "#663399",
+    "#881177",
+    "#aa3355",
+    "#cc6666",
+    "#ee9944",
+    "#eedd00",
+    "#99dd55",
+    "#44dd88",
 ]
 
 class PriceDisplay(Static):
@@ -74,8 +90,8 @@ class PriceDisplay(Static):
         super().__init__()
         self.symbol = symbol
         self.crytpoService = CryptoPriceService()
-        self.bid = "$ 72345.00"
-        self.ask = "$ 72350.00"
+        self.bid = "0"
+        self.ask = "0"
 
     def compose(self):
         yield Vertical(
@@ -90,19 +106,18 @@ class PriceDisplay(Static):
 
     async def on_mount(self):
         self.update_price()
-        self.set_interval(2.0, self.update_price)
+        self.set_interval(10.0, self.update_price)     
 
     @work(exclusive=True)
     async def update_price(self):
         bidLabel = self.query_one("#bid")
         askLabel = self.query_one("#ask")
         try:
-            price = self.crytpoService.getPrice(self.symbol)
+            price = self.crytpoService.get_price(self.symbol)
             bidLabel.update(str(price['bids'][0][0]))
             askLabel.update(str(price['asks'][0][0]))
         except:
-            bidLabel.update("UNK")
-            askLabel.update("UNK")
+            print("err")
         
 
 class Dashboard(Static):
@@ -116,7 +131,7 @@ class Dashboard(Static):
     }
 
     #dashboard-screen-container {
-        grid-size: 3 3;
+        grid-size: 3 6;
         padding: 0 1;
         border: thick $background 80%;
         background: $surface;

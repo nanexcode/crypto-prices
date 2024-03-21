@@ -1,0 +1,4 @@
+.DS_Store
+/src/CryptoWatcher.egg-info/
+.idea/
+__pycache__/

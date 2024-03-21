@@ -22,10 +22,6 @@ class CryptoPrices(App):
     def action_get_help(self) -> None:
         self.push_screen(HelpScreen())
 
-    def on_mount(self) -> None:
-        self.push_screen(WelcomeModal())
-        pass
-
 
 if __name__ == '__main__':
     CryptoPrices().run()

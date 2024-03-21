@@ -4,15 +4,24 @@ url = "https://api.exchange.coinbase.com/products/"
 
 class CryptoPriceService:
 
-    def getPrice(self, pair):
-        endpoint = url + pair.replace("/", "-") + "/book" # TODO: make this volume easy to be changed
+    def get_price(self, pair):
+        endpoint = url + pair.replace("/", "-") + "/book"
         r = requests.get(url = endpoint)
         return r.json()
+    
+    def get_products(self):
+        endpoint = "https://api.exchange.coinbase.com/products"
+        r = requests.get(url = endpoint)
+        data = r.json()
+        for product in data:
+            print(product['id'])
     
 
 
 if __name__ == '__main__':
-    price = CryptoPriceService().getPrice("btc/usd")
+    service = CryptoPriceService()
+    products = service.get_products()
+    price = CryptoPriceService().get_price("btc/usd")
     print(price)
     print(price['bids'][0][0])
     print(price['asks'][0][0])
